@@ -981,9 +981,9 @@ function optPlain(o){
  const c=window.__ctxInfo||{},L=[];
  L.push(`Simulação de jornada · EC nº 141/2026`,`${o.cyc?'Ciclo':'Opção'} ${o.n}: ${o.title}`,`Limite semanal: ${o.t}h · Status: ${STT[o.status]}`,'');
  o.wk.forEach((w,wi)=>{if(o.wt)L.push(o.wt[wi]);dayRows(w).forEach(r=>L.push(r.off?`${r.d}: descanso`:`${r.d}: ${r.t} · intervalo ${r.m} · total ${r.g}`));L.push('')});
- L.push(`Carga semanal: ${fmt(o.basis)} · Divisor mensal do salário-hora: ${String(o.div).replace('.',',')}`);
+ L.push(`Carga semanal: ${fmt(o.basis)}`);
  if(c.cur!=null)L.push(`Jornada atual: ${fmt(c.cur)} por semana`);
- L.push(`Intervalo considerado: ${c.mealText||'—'} · Acordo coletivo para intervalo reduzido: ${c.agree?'informado':'não informado'}`);
+ if(c.agree)L.push('Acordo coletivo para intervalo reduzido: informado');
  if(o.alerts.length){L.push('','Observações:');o.alerts.forEach(a=>L.push('- '+a))}
  if(nightOpt(o))L.push('',NIGHT_TXT.replace(/<[^>]+>/g,''));
  L.push('','Apoio de planejamento, não é parecer jurídico. Confirme a convenção coletiva aplicável.','Simulador de Jornada 5x2');
@@ -1036,7 +1036,7 @@ const eul=(t,a)=>a.length?`<p style="margin:0 0 4px"><b>${t}</b></p><ul style="m
 function optHTMLCopy(o){const c=window.__ctxInfo||{};let h='';
  h+=`<p style="margin:0 0 8px"><b>${o.cyc?'Ciclo':'Opção'} ${o.n}: ${esc(o.title)}</b><br>Limite semanal: ${o.t}h · Status: ${STT[o.status]}</p>`;
  o.wk.forEach((w,wi)=>{if(o.wt)h+=`<p style="margin:8px 0 0"><b>${o.wt[wi]}</b></p>`;h+=etb(['Dia','Entrada–saída','Intervalo','Total do dia'],dayRows(w).map(r=>r.off?[r.d,{t:'Descanso',span:3}]:[r.d,r.t,r.m,r.g]))});
- h+=etb(['Resumo','Resultado'],[['Carga semanal',fmt(o.basis)],['Divisor mensal do salário-hora',String(o.div).replace('.',',')],...(c.cur!=null?[['Jornada atual',fmt(c.cur)+' por semana']]:[]),['Intervalo considerado',c.mealText||'—'],['Acordo coletivo para intervalo reduzido',c.agree?'informado':'não informado']]);
+ h+=etb(['Resumo','Resultado'],[['Carga semanal',fmt(o.basis)],...(c.cur!=null?[['Jornada atual',fmt(c.cur)+' por semana']]:[]),...(c.agree?[['Acordo coletivo para intervalo reduzido','informado']]:[])]);
  h+=eul('Observações',o.alerts);
  if(nightOpt(o))h+=`<p style="margin:0 0 8px">${NIGHT_TXT}</p>`;
  return ewrap('Simulação de jornada · EC nº 141/2026',h)}
